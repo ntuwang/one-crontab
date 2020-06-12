@@ -11,7 +11,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 # redis地址
 REDIS_URL = 'redis://127.0.0.1:6379/'
 # 设置代理人broker
-CELERY_BROKER_URL = REDIS_URL + '0'
+BROKER_URL = REDIS_URL + '0'
 # 设置结果存储，可用于跟踪结果
 CELERY_RESULT_BACKEND = 'django-db'
 # celery 的启动工作数量设置
