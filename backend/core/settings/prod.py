@@ -17,9 +17,9 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'one',
+        'NAME': 'crontab',
         'USER': 'root',
-        'PASSWORD': 'TY%pwd123',
+        'PASSWORD': 'momo520',
         'HOST': 'localhost',
         'OPTIONS': {
             "init_command": "SET foreign_key_checks=0;",
