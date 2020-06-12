@@ -21,8 +21,8 @@ python manage.py init_sys
 celery运行
 ```bash
 celery -A celery_tasks.celery worker -l info
-python manage.py init_ticket
-python manage.py init_leave
+celery -A celery_tasks.celery beat -l info 
+
 ```
 
 运行
