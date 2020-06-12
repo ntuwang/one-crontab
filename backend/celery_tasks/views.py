@@ -10,6 +10,16 @@ class CrontabScheduleViewSet(BulkModelMixin):
     serializer_class = CrontabScheduleSerializer
 
 
+class CrontabViewSet(BulkModelMixin):
+    queryset = Crontab.objects.all()
+    serializer_class = CrontabSerializer
+
+
+class TaskViewSet(BulkModelMixin):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+
 class PeriodicTaskViewSet(BulkModelMixin):
     queryset = PeriodicTask.objects.all()
     serializer_class = PeriodicTaskSerializer
