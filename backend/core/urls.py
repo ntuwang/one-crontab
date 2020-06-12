@@ -28,5 +28,5 @@ if settings.APP_ENV == 'prod':
         # api文档
         url(r'^docs/', include_docs_urls(title='X Document')),
         # 静态模板
-        url(r'', TemplateView.as_view(template_name="index.html")),
+        # url(r'', TemplateView.as_view(template_name="index.html")),
     ]
