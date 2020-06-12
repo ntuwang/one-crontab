@@ -29,7 +29,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 # celery beat配置
-CELERY_TIMEZONE = settings.TIME_ZONE
+# CELERY_TIMEZONE = settings.TIME_ZONE
 CELERY_ENABLE_UTC = False
 DJANGO_CELERY_BEAT_TZ_AWARE = False
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
