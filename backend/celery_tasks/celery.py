@@ -11,6 +11,7 @@ from django.conf import settings
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 celery_app = Celery('celery_tasks', result_backend='django-db')
+# celery_app = Celery('celery_tasks', backend='redis://127.0.0.1:6379', broker='redis://127.0.0.1:6379')
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
 # - namespace='CELERY' means all celery-related configuration keys
