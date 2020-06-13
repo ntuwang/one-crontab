@@ -20,9 +20,7 @@ python manage.py init_sys
 
 celery运行
 ```bash
-celery -A celery_tasks.celery worker -l info
-celery -A celery_tasks.celery beat -l info 
-
+celery -A celery_tasks.celery worker -B -l info 
 ```
 
 运行
