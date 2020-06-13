@@ -5,11 +5,6 @@ from celery_tasks.serializers import *
 from common.views import ModelViewSet, BulkModelMixin
 
 
-class CrontabScheduleViewSet(BulkModelMixin):
-    queryset = CrontabSchedule.objects.all()
-    serializer_class = CrontabScheduleSerializer
-
-
 class CrontabViewSet(BulkModelMixin):
     queryset = Crontab.objects.all()
     serializer_class = CrontabSerializer

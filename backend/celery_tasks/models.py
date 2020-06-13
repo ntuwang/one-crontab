@@ -3,13 +3,11 @@
 
 from django.db import models
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from common.models import BaseModel
 
 
-class Crontab(models.Model):
-    name = models.CharField(max_length=110, blank=True)
+class Crontab(BaseModel):
+    name = models.CharField(max_length=110, unique=True, blank=True)
     cron = models.OneToOneField(CrontabSchedule, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -30,14 +28,3 @@ class Task(BaseModel):
     class Meta:
         verbose_name = '任务'
         verbose_name_plural = verbose_name
-
-
-@receiver(post_save, sender=CrontabSchedule)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Crontab.objects.create(user=instance)
-
-
-@receiver(post_save, sender=CrontabSchedule)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
