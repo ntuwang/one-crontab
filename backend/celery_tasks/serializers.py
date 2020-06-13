@@ -46,3 +46,9 @@ class PeriodicTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = PeriodicTask
         fields = ['id', 'name', 'task', 'args', 'kwargs', 'enabled', 'last_run_at', 'total_run_count', 'crontab', 'one_off', 'start_time', 'expires']
+
+
+class TaskResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskResult
+        fields = ['id', 'task_name', 'task_args', 'task_kwargs', 'status', 'date_created', 'date_done', 'result']

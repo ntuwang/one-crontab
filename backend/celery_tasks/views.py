@@ -20,3 +20,8 @@ class PeriodicTaskViewSet(BulkModelMixin):
     serializer_class = PeriodicTaskSerializer
     search_fields = ['name']
     filter_fields = ['name']
+
+
+class TaskResultViewSet(BulkModelMixin):
+    queryset = TaskResult.objects.all()
+    serializer_class = TaskResultSerializer
