@@ -16,6 +16,7 @@ pip install -r dev_requirements.txt
 ```bash
 python manage.py migrate
 python manage.py init_sys
+python manage.py init_celery
 ```
 
 celery运行
@@ -42,15 +43,3 @@ npm run dev
 
 ### 分配菜单 和 数据 权限
 ![role_edit](https://github.com/itimor/one-workflow/raw/master/gifs/role_edit.png)
-
-### 配置假期工作流
-![role](https://github.com/itimor/one-workflow/raw/master/gifs/leave.png)
-
-### 新建工单
-![role](https://github.com/itimor/one-workflow/raw/master/gifs/new.png)
-
-### 编辑工单
-![role](https://github.com/itimor/one-workflow/raw/master/gifs/edit.png)
-
-### 所有工单
-![role](https://github.com/itimor/one-workflow/raw/master/gifs/all.png)

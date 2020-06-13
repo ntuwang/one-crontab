@@ -23,7 +23,7 @@ class PeriodicTaskViewSet(BulkModelMixin):
 
 
 class TaskResultViewSet(BulkModelMixin):
-    queryset = TaskResult.objects.all()
+    queryset = TaskResult.objects.all().order_by("id")
     serializer_class = TaskResultSerializer
     filter_fields = ['task_name']
 
