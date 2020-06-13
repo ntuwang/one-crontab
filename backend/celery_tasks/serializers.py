@@ -36,19 +36,19 @@ class CrontabSerializer(serializers.ModelSerializer):
         return instance
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskScriptSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Task
+        model = TaskScript
         fields = '__all__'
 
 
 class PeriodicTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = PeriodicTask
-        fields = ['id', 'name', 'task', 'args', 'kwargs', 'enabled', 'last_run_at', 'total_run_count', 'crontab', 'one_off', 'start_time', 'expires']
+        fields = ['id', 'name', 'task', 'args', 'enabled', 'last_run_at', 'total_run_count', 'crontab', 'one_off', 'start_time', 'expires']
 
 
 class TaskResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskResult
-        fields = ['id', 'task_name', 'task_args', 'task_kwargs', 'status', 'date_created', 'date_done', 'result']
+        fields = ['id', 'task_name', 'task_args', 'status', 'date_created', 'date_done', 'result']

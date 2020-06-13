@@ -37,9 +37,16 @@
       @sort-change="handleSortChange"
     >
       <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="账号id" prop="uid"></el-table-column>
-      <el-table-column label="token" prop="token"></el-table-column>
-      <el-table-column label="chat_id" prop="chat_id"></el-table-column>
+      <el-table-column label="任务" prop="task"></el-table-column>
+      <el-table-column label="参数" prop="args"></el-table-column>
+      <el-table-column label="状态" prop="enabled">
+        <template slot-scope="{ row }">
+          <el-tag v-if="row.enabled" type="success">启用</el-tag>
+          <el-tag v-else type="danger">禁用</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="开始时间" prop="start_time"></el-table-column>
+      <el-table-column label="失效时间" prop="expires"></el-table-column>
       <el-table-column label="操作" align="center" width="260" class-name="small-padding fixed-width">
         <template slot-scope="{ row }">
           <el-button-group>
@@ -84,14 +91,42 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
-        <el-form-item label="账号id" prop="uid">
-          <el-input v-model="temp.uid" />
+        <el-form-item label="cron配置" prop="crontab">
+          <el-select v-model="temp.crontab" clearable placeholder="请选择">
+            <el-option
+              v-for="item in crontab_list"
+              :key="item.id"
+              :label="item.name"
+              :value="item.cron.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="token" prop="token">
-          <el-input v-model="temp.token" />
+        <el-form-item label="任务" prop="task">
+          <el-select v-model="temp.task" clearable placeholder="请选择">
+            <el-option
+              v-for="item in taskscript_list"
+              :key="item.id"
+              :label="item.name"
+              :value="item.code"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="chat_id" prop="chat_id">
-          <el-input v-model="temp.chat_id" />
+        <el-form-item label="参数" prop="args">
+          <el-input v-model="temp.args" />
+        </el-form-item>
+        <el-form-item label="状态" prop="enabled">
+          <el-switch v-model="temp.enabled" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </el-form-item>
+        <el-form-item label="开始时间" prop="start_time">
+          <el-date-picker
+            v-model="temp.start_time"
+            type="datetime"
+            placeholder="选择日期时间"
+            align="right"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="过期时间" prop="expires">
+          <el-date-picker v-model="temp.expires" type="datetime" placeholder="选择日期时间" align="right"></el-date-picker>
         </el-form-item>
         <el-form-item label="备注" prop="memo">
           <el-input v-model="temp.memo" />
@@ -109,7 +144,7 @@
 </template>
 
 <script>
-import { telegram, auth } from "@/api/all";
+import { task, crontab, taskscript, auth } from "@/api/all";
 import Pagination from "@/components/Pagination";
 import {
   checkAuthAdd,
@@ -119,7 +154,7 @@ import {
 } from "@/utils/permission";
 
 export default {
-  name: "telegram",
+  name: "task",
 
   components: { Pagination },
   data() {
@@ -150,13 +185,17 @@ export default {
       },
       rules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }]
-      }
+      },
+      crontab_list: [],
+      taskscript_list: []
     };
   },
   computed: {},
   created() {
     this.getMenuButton();
     this.getList();
+    this.getCrontab();
+    this.getScript();
   },
   methods: {
     checkPermission() {
@@ -167,7 +206,7 @@ export default {
     },
     getMenuButton() {
       auth
-        .requestMenuButton("telegram")
+        .requestMenuButton("task")
         .then(response => {
           this.operationList = response.results;
         })
@@ -177,10 +216,20 @@ export default {
     },
     getList() {
       this.listLoading = true;
-      telegram.requestGet(this.listQuery).then(response => {
+      task.requestGet(this.listQuery).then(response => {
         this.list = response.results;
         this.total = response.count;
         this.listLoading = false;
+      });
+    },
+    getCrontab() {
+      crontab.requestGet().then(response => {
+        this.crontab_list = response.results;
+      });
+    },
+    getScript() {
+      taskscript.requestGet().then(response => {
+        this.taskscript_list = response.results;
       });
     },
     handleFilter() {
@@ -198,11 +247,14 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        type: "telegram",
         name: "",
-        uid: "",
-        token: "",
-        chat_id: "",
+        task: "",
+        args: "[]",
+        enabled: true,
+        crontab: "",
+        one_off: false,
+        start_time: "",
+        expires: "",
         memo: ""
       };
     },
@@ -219,7 +271,7 @@ export default {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          telegram
+          task
             .requestPost(this.temp)
             .then(response => {
               this.dialogFormVisible = false;
@@ -249,7 +301,7 @@ export default {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          telegram
+          task
             .requestPut(this.temp.id, this.temp)
             .then(() => {
               this.dialogFormVisible = false;
@@ -273,7 +325,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          telegram.requestDelete(row.id).then(() => {
+          task.requestDelete(row.id).then(() => {
             this.$message({
               message: "删除成功",
               type: "success"

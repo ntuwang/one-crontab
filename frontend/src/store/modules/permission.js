@@ -177,20 +177,13 @@ export const componentsMap = {
   audit: () => import('@/views/tool/audit'), // 审计日志
   test: () => import('@/views/tool/test'), // test
 
-  // workflow
-  wfset: () => import('@/views/workflow/wfset'), // 工作流设计
-  wfconf: () => import('@/views/workflow/wfconf'), // 工作流配置
-  wftype: () => import('@/views/workflow/wftype'), // 工单类型
-
-  // tickets
-  new_ticket: () => import('@/views/ticket/new_ticket'), // 新建工单
-  u_ticket: () => import('@/views/ticket/u_ticket'), // 编辑工单
-  s_ticket: () => import('@/views/ticket/s_ticket'), // 处理工单
-  my_ticket: () => import('@/views/ticket/my_ticket'), // 我创建的
-  todo_ticket: () => import('@/views/ticket/todo_ticket'), // 我的待办
-  all_ticket: () => import('@/views/ticket/all_ticket'), // 编辑工单
-
   // notice
   mail: () => import('@/views/notice/mail'), // mail bot
   telegram: () => import('@/views/notice/telegram'), // telegram bot
+
+  // celery
+  crontab: () => import('@/views/celery_task/crontab'), // cron配置
+  taskscript: () => import('@/views/celery_task/taskscript'), // 任务脚本
+  task: () => import('@/views/celery_task/task'), // 任务
+  taskresult: () => import('@/views/celery_task/taskresult'), // 任务结果
 }

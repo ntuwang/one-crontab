@@ -21,7 +21,7 @@ export const telegram = new Request('/notice/telegram/')
 
 // celery_task
 export const crontab = new Request('/celery_task/crontab/')
+export const taskscript = new Request('/celery_task/taskscript/')
 export const task = new Request('/celery_task/task/')
-export const periodictask = new Request('/celery_task/periodictask/')
 export const taskresult = new Request('/celery_task/taskresult/')
 

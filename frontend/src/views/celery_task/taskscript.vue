@@ -37,8 +37,7 @@
       @sort-change="handleSortChange"
     >
       <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="主机" prop="host"></el-table-column>
-      <el-table-column label="账号" prop="user"></el-table-column>
+      <el-table-column label="code" prop="code"></el-table-column>
       <el-table-column label="操作" align="center" width="260" class-name="small-padding fixed-width">
         <template slot-scope="{ row }">
           <el-button-group>
@@ -83,17 +82,10 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
-        <el-form-item label="主机" prop="host">
-          <el-input v-model="temp.host" />
-        </el-form-item>
-        <el-form-item label="账号" prop="user">
-          <el-input v-model="temp.user" />
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" />
-        </el-form-item>
-        <el-form-item label="接收者" prop="to">
-          <el-input v-model="temp.to" />
+        <el-form-item label="code" prop="code">
+          <el-input v-model="temp.code">
+            <template slot="prepend">celery_tasks.tasks.</template>
+          </el-input>
         </el-form-item>
         <el-form-item label="备注" prop="memo">
           <el-input v-model="temp.memo" />
@@ -111,7 +103,7 @@
 </template>
 
 <script>
-import { mail, auth } from "@/api/all";
+import { taskscript, auth } from "@/api/all";
 import Pagination from "@/components/Pagination";
 import {
   checkAuthAdd,
@@ -121,7 +113,7 @@ import {
 } from "@/utils/permission";
 
 export default {
-  name: "mail",
+  name: "taskscript",
 
   components: { Pagination },
   data() {
@@ -169,7 +161,7 @@ export default {
     },
     getMenuButton() {
       auth
-        .requestMenuButton("mail")
+        .requestMenuButton("taskscript")
         .then(response => {
           this.operationList = response.results;
         })
@@ -179,7 +171,7 @@ export default {
     },
     getList() {
       this.listLoading = true;
-      mail.requestGet(this.listQuery).then(response => {
+      taskscript.requestGet(this.listQuery).then(response => {
         this.list = response.results;
         this.total = response.count;
         this.listLoading = false;
@@ -200,12 +192,8 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        type: "mail",
         name: "",
-        host: "",
-        user: "",
-        password: "123456",
-        to: "",
+        code: "",
         memo: ""
       };
     },
@@ -222,7 +210,8 @@ export default {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          mail
+          this.temp.code = "celery_tasks.tasks." + this.temp.code
+          taskscript
             .requestPost(this.temp)
             .then(response => {
               this.dialogFormVisible = false;
@@ -242,6 +231,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = row;
+      this.temp.code = this.temp.code.slice(19)
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
       this.$nextTick(() => {
@@ -252,7 +242,8 @@ export default {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.loading = true;
-          mail
+          this.temp.code = "celery_tasks.tasks." + this.temp.code
+          taskscript
             .requestPut(this.temp.id, this.temp)
             .then(() => {
               this.dialogFormVisible = false;
@@ -276,7 +267,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          mail.requestDelete(row.id).then(() => {
+          taskscript.requestDelete(row.id).then(() => {
             this.$message({
               message: "删除成功",
               type: "success"

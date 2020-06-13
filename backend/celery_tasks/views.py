@@ -10,9 +10,9 @@ class CrontabViewSet(BulkModelMixin):
     serializer_class = CrontabSerializer
 
 
-class TaskViewSet(BulkModelMixin):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+class TaskScriptViewSet(BulkModelMixin):
+    queryset = TaskScript.objects.all()
+    serializer_class = TaskScriptSerializer
 
 
 class PeriodicTaskViewSet(BulkModelMixin):
@@ -25,3 +25,5 @@ class PeriodicTaskViewSet(BulkModelMixin):
 class TaskResultViewSet(BulkModelMixin):
     queryset = TaskResult.objects.all()
     serializer_class = TaskResultSerializer
+    filter_fields = ['task_name']
+

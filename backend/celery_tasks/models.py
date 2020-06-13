@@ -19,7 +19,7 @@ class Crontab(BaseModel):
         verbose_name_plural = verbose_name
 
 
-class Task(BaseModel):
+class TaskScript(BaseModel):
     name = models.CharField(max_length=110, blank=True)
     code = models.CharField(max_length=32, unique=True, verbose_name='代码')
 

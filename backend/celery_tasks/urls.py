@@ -4,13 +4,13 @@
 
 from django.conf.urls import url, include
 from rest_framework import routers
-from celery_tasks.views import CrontabViewSet, TaskViewSet, PeriodicTaskViewSet, TaskResultViewSet
+from celery_tasks.views import CrontabViewSet, TaskScriptViewSet, PeriodicTaskViewSet, TaskResultViewSet
 
 router = routers.DefaultRouter()
 
 router.register(r'crontab', CrontabViewSet)
-router.register(r'task', TaskViewSet)
-router.register(r'periodictask', PeriodicTaskViewSet)
+router.register(r'taskscript', TaskScriptViewSet)
+router.register(r'task', PeriodicTaskViewSet)
 router.register(r'taskresult', TaskResultViewSet)
 
 
