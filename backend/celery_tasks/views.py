@@ -6,17 +6,17 @@ from common.views import ModelViewSet, BulkModelMixin
 
 
 class CrontabViewSet(BulkModelMixin):
-    queryset = Crontab.objects.all()
+    queryset = Crontab.objects.all().order_by("id")
     serializer_class = CrontabSerializer
 
 
 class TaskScriptViewSet(BulkModelMixin):
-    queryset = TaskScript.objects.all()
+    queryset = TaskScript.objects.all().order_by("id")
     serializer_class = TaskScriptSerializer
 
 
 class PeriodicTaskViewSet(BulkModelMixin):
-    queryset = PeriodicTask.objects.all()
+    queryset = PeriodicTask.objects.all().order_by("id")
     serializer_class = PeriodicTaskSerializer
     search_fields = ['name']
     filter_fields = ['name']
