@@ -12,7 +12,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 REDIS_URL = 'redis://127.0.0.1:6379/'
 # 设置代理人broker
 BROKER_URL = REDIS_URL + '0'
-CELERY_BROKER_URL = REDIS_URL + '0'
+CELERY_BROKER_URL = BROKER_URL
 # 设置结果存储，可用于跟踪结果
 CELERY_RESULT_BACKEND = 'django-db'
 # celery 的启动工作数量设置
@@ -35,7 +35,7 @@ CELERY_TIMEZONE = settings.TIME_ZONE
 CELERY_ENABLE_UTC = False
 DJANGO_CELERY_BEAT_TZ_AWARE = False
 CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULER = CELERYBEAT_SCHEDULER
 
 # celery缓存
 CACHES = {
