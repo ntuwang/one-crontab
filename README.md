@@ -1,5 +1,5 @@
 # django + vue 动态执行计划任务
-包含 `用户`、`角色`、`菜单`、`权限` 管理， 使用django-celery-beat实现动态配置任务
+包含 `用户`、`角色`、`菜单`、`权限` 管理， 使用django-celery-beat实现动态配置任务，
 
 - 后端model参考: [loonflow](https://github.com/blackholll/loonflow), 非常不错的一个项目
 - 前端设计参考: [花裤衩 vue-element-admin](https://github.com/PanJiaChen/vue-element-admin), 大神作品没得说
