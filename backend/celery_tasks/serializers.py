@@ -6,8 +6,10 @@ from rest_framework import serializers
 
 
 class TaskSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Task
+        extra_kwargs = {'action_time': {'write_only': True, 'required': False}}
         fields = '__all__'
 
 
