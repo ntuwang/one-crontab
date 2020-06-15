@@ -4,6 +4,7 @@
 
 from django.conf import settings
 import os
+from celery.schedules import crontab, timedelta
 
 # 为celery设置环境变量
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
@@ -36,6 +37,19 @@ CELERY_ENABLE_UTC = False
 DJANGO_CELERY_BEAT_TZ_AWARE = False
 CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULER = CELERYBEAT_SCHEDULER
+
+# 定时任务
+CELERYBEAT_SCHEDULE = {
+    'sum-task': {
+        'task': 'celery_tasks.tasks.get_task',
+        'schedule': timedelta(seconds=30),
+        'args': (5, 6)
+    },
+    'send-report': {
+        'task': 'celery_tasks.tasks.get_action_task',
+        'schedule': timedelta(seconds=30),
+    }
+}
 
 # celery缓存
 CACHES = {
