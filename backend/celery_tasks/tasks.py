@@ -32,3 +32,13 @@ def get_action_task():
     all_task = Task.objects.filter(status=True, action_time=now)
     for task in all_task:
         print(task.name, task.code, task.args)
+        run_task.delay(task.name)
+
+
+@shared_task
+def run_task(name):
+    """
+    获取当前需要执行的任务脚本并执行
+    """
+    with open('/tmp/aaa.log', 'a+') as fn:
+        fn.writable(name)
