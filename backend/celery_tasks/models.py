@@ -21,7 +21,6 @@ class Task(BaseModel):
     code = models.TextField('脚本代码', blank=True)
     start_time = models.DateTimeField('开始时间', blank=True)
     expire_time = models.DateTimeField('到期时间', blank=True)
-    action_time = models.DateTimeField('执行时间', blank=True)
 
     def __str__(self):
         return self.name
