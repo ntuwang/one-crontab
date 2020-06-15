@@ -5,7 +5,9 @@ from celery import shared_task
 from croniter import croniter
 from django.utils import timezone
 from datetime import datetime, timedelta
+from celery.schedules import crontab
 from celery_tasks.models import *
+from celery_tasks.celery import celery_app
 
 
 @shared_task
@@ -24,15 +26,6 @@ def get_task():
 
 
 @shared_task
-def run_task(name):
-    """
-    获取当前需要执行的任务脚本并执行
-    """
-    with open('/tmp/aaa.log', 'a+') as fn:
-        fn.writable(name)
-
-
-@shared_task
 def get_action_task():
     """
     获取当前需要执行的任务脚本并执行
@@ -41,4 +34,16 @@ def get_action_task():
     all_task = Task.objects.filter(status=True, action_time=now)
     for task in all_task:
         print(task.name, task.code, task.args)
-        run_task.delay(task.name)
+        celery_app.conf.update(
+            CELERYBEAT_SCHEDULE={
+                task.name: {
+                    'task': 'celery_tasks.tasks.run_task',
+                    'schedule': crontab(hour=4, minute=30, day_of_week=1),
+                }
+            }
+        )
+
+
+@shared_task
+def run_task(name):
+    print(name)
