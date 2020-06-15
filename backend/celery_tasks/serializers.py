@@ -9,7 +9,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        extra_kwargs = {'action_time': {'write_only': True, 'required': False}}
+        extra_kwargs = {'action_time': {'read_only': True}}
         fields = '__all__'
 
 
