@@ -43,7 +43,6 @@ CELERYBEAT_SCHEDULE = {
     'sum-task': {
         'task': 'celery_tasks.tasks.get_task',
         'schedule': timedelta(seconds=30),
-        'args': (5, 6)
     },
     'send-report': {
         'task': 'celery_tasks.tasks.get_action_task',
