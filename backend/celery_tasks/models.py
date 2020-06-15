@@ -4,6 +4,7 @@
 from django.db import models
 from common.models import BaseModel
 
+
 code_type = {
     'shell': 'shell',
     'python': 'python',
