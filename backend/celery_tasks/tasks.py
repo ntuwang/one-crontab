@@ -52,8 +52,8 @@ def get_task():
         task.save()
 
 
-@shared_task
-def run_task(**kwargs):
+@shared_task(bind=True)
+def run_task(self, *args, **kwargs):
     script_type = kwargs['type']
     script_code = kwargs['code']
     script_args = kwargs['args']
