@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from celery_tasks.models import *
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from django.conf import settings
+import pytz
 from utils.index import gen_time_pid
 import subprocess
 
@@ -20,9 +21,11 @@ def get_task():
     now = timezone.now()
     # 前一天
     start = now - timedelta(hours=23, minutes=59, seconds=59)
+    tz = pytz.timezone(settings.TIME_ZONE)
+    local_date = tz.localize(now)
     all_task = Task.objects.filter(status=True, start_time__lt=start, expire_time__gt=start)
     for task in all_task:
-        iter = croniter(task.cron, now)
+        iter = croniter(task.cron, local_date)
         t = iter.get_next(datetime)
         cron_obj, created = CrontabSchedule.objects.get_or_create(minute=t.minute, hour=t.hour, day_of_month=t.month, month_of_year=t.year, timezone=settings.TIME_ZONE)
         kwargs = dict()
