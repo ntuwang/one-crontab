@@ -27,7 +27,10 @@ def get_task():
     for task in all_task:
         iter = croniter(task.cron, local_date)
         t = iter.get_next(datetime)
-        cron_obj, created = CrontabSchedule.objects.get_or_create(minute=t.minute, hour=t.hour, day_of_month=t.month, month_of_year=t.year)
+        cron_obj, created = CrontabSchedule.objects.get_or_create(
+            minute=t.minute, hour=t.hour, day_of_month=t.month,
+            defaults={"month_of_year": t.year}
+        )
         kwargs = dict()
         kwargs['type'] = task.code_type
         kwargs['code'] = task.code
