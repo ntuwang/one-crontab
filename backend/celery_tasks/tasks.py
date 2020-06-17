@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
+import subprocess
 from celery import shared_task
 from croniter import croniter
-from django.utils import timezone
 from datetime import datetime, timedelta
-from celery_tasks.models import *
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
-from django.conf import settings
 import pytz
+from django.conf import settings
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from celery_tasks.models import *
 from utils.index import gen_time_pid
-import subprocess
+
 
 
 @shared_task
@@ -18,11 +18,11 @@ def get_task():
     """
     获取所有任务脚本，并执行
     """
-    now = timezone.now()
+    now = datetime.now()
     # 前一天
-    start = now - timedelta(hours=23, minutes=59, seconds=59)
     tz = pytz.timezone(settings.TIME_ZONE)
     local_date = tz.localize(now)
+    start = local_date - timedelta(hours=23, minutes=59, seconds=59)
     all_task = Task.objects.filter(status=True, start_time__lt=start, expire_time__gt=start)
     for task in all_task:
         iter = croniter(task.cron, local_date)
