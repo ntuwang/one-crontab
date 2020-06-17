@@ -28,10 +28,11 @@ def get_task():
     for task in all_task:
         iter = croniter(task.cron, local_date)
         t = iter.get_next(datetime)
-        cron_obj, created = CrontabSchedule.objects.get_or_create(
-            minute=t.minute, hour=t.hour, day_of_month=t.month,
-            defaults={"month_of_year": t.year}
-        )
+        # cron_obj, created = CrontabSchedule.objects.get_or_create(
+        #     minute=t.minute, hour=t.hour, day_of_month=t.month,
+        #     defaults={"month_of_year": t.year}
+        # )
+        cron_obj, created = CrontabSchedule.objects.create(minute='*')
         kwargs = dict()
         kwargs['type'] = task.code_type
         kwargs['code'] = task.code
@@ -42,10 +43,10 @@ def get_task():
                 "task": 'celery_tasks.tasks.run_task',
                 "kwargs": kwargs,
                 "enabled": True,
-                "one_off": True,
                 "crontab": cron_obj,
+                "expire_seconds": 60,
+                # "one_off": True,
                 # "start_time": t,
-                "expire_seconds": 60
             }
         )
         task.save()
