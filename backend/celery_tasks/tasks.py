@@ -19,14 +19,15 @@ def get_task():
     """
     now = datetime.now()
     # 前一天
-    tz = pytz.timezone(settings.TIME_ZONE)
+    # tz = pytz.timezone(settings.TIME_ZONE)
+    tz = pytz.timezone('UTC')
     local_date = tz.localize(now)
     start = local_date - timedelta(hours=23, minutes=59, seconds=59)
     all_task = Task.objects.filter(status=True, start_time__lt=start, expire_time__gt=start)
     for task in all_task:
         iter = croniter(task.cron, local_date)
         t = iter.get_next(datetime)
-        cron_obj, created = CrontabSchedule.objects.get_or_create(minute=t.minute, hour=t.hour, day_of_month=t.month, month_of_year=t.year, timezone=settings.TIME_ZONE)
+        cron_obj, created = CrontabSchedule.objects.get_or_create(minute=t.minute, hour=t.hour, day_of_month=t.month, month_of_year=t.year)
         kwargs = dict()
         kwargs['type'] = task.code_type
         kwargs['code'] = task.code
@@ -39,7 +40,8 @@ def get_task():
                 "enabled": True,
                 "one_off": True,
                 "crontab": cron_obj,
-                "start_time": t
+                "start_time": t,
+                "expire_seconds": 60
             }
         )
         task.save()
