@@ -8,6 +8,8 @@ from datetime import datetime, timedelta
 from celery_tasks.models import *
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from django.conf import settings
+from utils.index import gen_time_pid
+import subprocess
 
 
 @shared_task
@@ -23,11 +25,14 @@ def get_task():
         iter = croniter(task.cron, now)
         t = iter.get_next(datetime)
         cron_obj, created = CrontabSchedule.objects.get_or_create(minute=t.minute, hour=t.hour, day_of_month=t.month, month_of_year=t.year, timezone=settings.TIME_ZONE)
-        args = [task.code_type]
+        kwargs = dict()
+        kwargs['type'] = task.code_type
+        kwargs['code'] = task.code
+        kwargs['args'] = task.args
         PeriodicTask.objects.create(
             name=task.name,
             task='celery_tasks.tasks.run_task',
-            args=args + task.args.split(','),
+            kwargs=kwargs,
             enabled=True,
             one_off=True,
             crontab=cron_obj,
@@ -37,5 +42,18 @@ def get_task():
 
 
 @shared_task
-def run_task(x, y):
-    print(y)
+def run_task(**kwargs):
+    script_type = kwargs['type']
+    script_code = kwargs['code']
+    script_args = kwargs['args']
+    script_name = "/tmp/" + gen_time_pid(type)
+    with open(script_name, 'w') as fn:
+        fn.read(script_code)
+
+    if script_type == 'shell':
+        r = subprocess.check_output(["basn", script_name, script_args], shell=True)
+    elif script_type == 'python':
+        r = subprocess.check_output(["python", script_name, script_args], shell=True)
+    else:
+        r = 'error'
+    return r
