@@ -23,10 +23,11 @@ def get_task():
         iter = croniter(task.cron, now)
         t = iter.get_next(datetime)
         cron_obj, created = CrontabSchedule.objects.get_or_create(minute=t.minute, hour=t.hour, day_of_month=t.month, month_of_year=t.year, timezone=settings.TIME_ZONE)
+        args = [task.code_type]
         PeriodicTask.objects.create(
             name=task.name,
             task='celery_tasks.tasks.run_task',
-            args=task.args.split(','),
+            args=args + task.args.split(','),
             enabled=True,
             one_off=True,
             crontab=cron_obj,
