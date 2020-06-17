@@ -44,7 +44,7 @@ def get_task():
                 "kwargs": kwargs,
                 "enabled": True,
                 "crontab": cron_obj,
-                "expire_seconds": 60,
+                # "expire_seconds": 60,
                 # "one_off": True,
                 # "start_time": t,
             }
