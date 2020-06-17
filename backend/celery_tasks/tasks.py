@@ -10,6 +10,7 @@ from django.conf import settings
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from celery_tasks.models import *
 from utils.index import gen_time_pid
+from utils.time import local2utc
 
 
 @shared_task
@@ -17,7 +18,7 @@ def get_task():
     """
     获取所有任务脚本，并执行
     """
-    now = datetime.now()
+    now = local2utc(datetime.now())
     # 前一天
     # tz = pytz.timezone(settings.TIME_ZONE)
     tz = pytz.timezone('UTC')
