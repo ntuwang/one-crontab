@@ -13,7 +13,7 @@ import logging
 @shared_task
 def get_task():
     """
-    获取所有任务脚本，并设置下次执行时间
+    获取所有任务脚本，并执行
     """
     now = timezone.now()
     # 前一天
@@ -29,7 +29,7 @@ def get_task():
         PeriodicTask.objects.create(
             name=task.name,
             task='celery_tasks.tasks.run_task',
-            args=task.args,
+            args=task.args.split(','),
             enabled=True,
             one_off=True,
             crontab=cron_obj,
@@ -39,5 +39,5 @@ def get_task():
 
 
 @shared_task
-def run_task(name):
-    print(name)
+def run_task(x, y):
+    print(y)
