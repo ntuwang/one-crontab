@@ -12,7 +12,6 @@ from celery_tasks.models import *
 from utils.index import gen_time_pid
 
 
-
 @shared_task
 def get_task():
     """
@@ -32,14 +31,16 @@ def get_task():
         kwargs['type'] = task.code_type
         kwargs['code'] = task.code
         kwargs['args'] = task.args
-        PeriodicTask.objects.create(
+        PeriodicTask.objects.update_or_create(
             name=task.name,
-            task='celery_tasks.tasks.run_task',
-            kwargs=kwargs,
-            enabled=True,
-            one_off=True,
-            crontab=cron_obj,
-            start_time=t
+            defaults={
+                "task": 'celery_tasks.tasks.run_task',
+                "kwargs": kwargs,
+                "enabled": True,
+                "one_off": True,
+                "crontab": cron_obj,
+                "start_time": t
+            }
         )
         task.save()
 
