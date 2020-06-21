@@ -4,7 +4,7 @@
 
 from django.conf.urls import url, include
 from rest_framework import routers
-from celery_tasks.views import TaskViewSet, TaskLogViewSet, add
+from celery_tasks.views import TaskViewSet, TaskLogViewSet, one_add
 
 router = routers.DefaultRouter()
 
