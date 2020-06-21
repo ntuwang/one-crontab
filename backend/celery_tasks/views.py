@@ -20,7 +20,7 @@ class TaskLogViewSet(BulkModelMixin):
     filter_fields = ['task']
 
 
-class add(APIView):
+class one_add(APIView):
     def post(self, request, *args, **kwargs):
         ret = {'code': 1000, 'msg': "success"}
         add.delay(1, 2)

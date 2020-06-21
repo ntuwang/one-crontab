@@ -12,7 +12,7 @@ router.register(r'task', TaskViewSet)
 router.register(r'tasklog', TaskLogViewSet)
 
 urlpatterns = [
-    url(r'^add/', add.as_view()),
+    url(r'^one_add/', one_add.as_view()),
 ]
 
 urlpatterns += router.urls
