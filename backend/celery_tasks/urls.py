@@ -4,7 +4,7 @@
 
 from django.conf.urls import url, include
 from rest_framework import routers
-from celery_tasks.views import TaskViewSet, TaskLogViewSet
+from celery_tasks.views import TaskViewSet, TaskLogViewSet, add
 
 router = routers.DefaultRouter()
 
@@ -12,6 +12,7 @@ router.register(r'task', TaskViewSet)
 router.register(r'tasklog', TaskLogViewSet)
 
 urlpatterns = [
+    url(r'^add/', add.as_view()),
 ]
 
 urlpatterns += router.urls

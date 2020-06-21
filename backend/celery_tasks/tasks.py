@@ -14,6 +14,10 @@ from utils.time import local2utc
 
 
 @shared_task
+def add(x, y):
+    return x + y
+
+@shared_task
 def get_task():
     """
     获取所有任务脚本，并执行
