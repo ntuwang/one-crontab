@@ -11,11 +11,14 @@ from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from celery_tasks.models import *
 from utils.index import gen_time_pid
 from utils.time import local2utc
+from time import sleep
 
 
 @shared_task
 def add(x, y):
+    sleep(30)
     return x + y
+
 
 @shared_task
 def get_task():
