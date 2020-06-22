@@ -40,15 +40,15 @@ def get_task():
         #     defaults={"month_of_year": t.year}
         # )
         cron_obj, created = CrontabSchedule.objects.create(minute='*')
-        kwargs = dict()
-        kwargs['type'] = task.code_type
-        kwargs['code'] = task.code
-        kwargs['args'] = task.args
+        # kwargs = dict()
+        # kwargs['type'] = task.code_type
+        # kwargs['code'] = task.code
+        # kwargs['args'] = task.args
         PeriodicTask.objects.update_or_create(
             name=task.name,
             defaults={
                 "task": 'celery_tasks.tasks.run_task',
-                "kwargs": kwargs,
+                "args": [task.code_type, task.code, task.args],
                 "enabled": True,
                 "crontab": cron_obj,
                 # "expire_seconds": 60,
@@ -59,11 +59,8 @@ def get_task():
         task.save()
 
 
-@shared_task(bind=True)
-def run_task(self, *args, **kwargs):
-    script_type = kwargs['type']
-    script_code = kwargs['code']
-    script_args = kwargs['args']
+@shared_task()
+def run_task(script_type, script_code, script_args):
     script_name = "/tmp/" + gen_time_pid(type)
     with open(script_name, 'w') as fn:
         fn.read(script_code)
