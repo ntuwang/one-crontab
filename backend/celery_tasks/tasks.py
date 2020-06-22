@@ -59,7 +59,7 @@ def get_task():
         task.save()
 
 
-@shared_task()
+@shared_task
 def run_task(script_type, script_code, script_args):
     script_name = "/tmp/" + gen_time_pid(type)
     with open(script_name, 'w') as fn:
